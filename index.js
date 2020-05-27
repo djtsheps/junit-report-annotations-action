@@ -37,7 +37,6 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
       if (json.testsuites) json = json.testsuites;
 
       await invokeOnOneOrMany(json.testsuite, async testsuite => {
-        const testsuite = json.testsuite;
         testDuration += Number(testsuite.time);
         numTests += Number(testsuite.tests);
         numErrored += Number(testsuite.errors);
