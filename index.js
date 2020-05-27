@@ -27,7 +27,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
     let numSkipped = 0;
     let numFailed = 0;
     let numErrored = 0;
-    let testDuration = 0;z
+    let testDuration = 0;
 
     let annotations = [];
 
