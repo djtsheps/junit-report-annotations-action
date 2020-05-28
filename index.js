@@ -47,19 +47,9 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
         await invokeOnOneOrMany(testsuite.testcase, async testcase => {
           if (testcase.failure) {
             if (annotations.length < numFailures) {
-              const klass = testcase.classname.replace(/$.*/g, '').replace(/\./g, '/');
-              const path = `${testSrcPath}${klass}.java`
+              let path = testsuite.filepath || testsuite.file;
+              let line = Number(testcase.lineno);
 
-              const file = await fs.promises.readFile(path, { encoding: 'utf-8' });
-              //TODO: make this better won't deal with methods with arguments etc
-              let line = 0;
-              const lines = file.split('\n')
-              for (let i = 0; i < lines.length; i++) {
-                if (lines[i].indexOf(testcase.name) >= 0) {
-                  line = i;
-                  break;
-                }
-              }
               annotations.push({
                 path: path,
                 start_line: line,
@@ -67,10 +57,9 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: `Junit test ${testcase.name} failed ${testcase.failure.message}`,
+                message: `${testcase.name} failed ${testcase.failure.message}`,
               });
             }
-            //add
           }
         });
       });
@@ -94,17 +83,8 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
       start_column: 0,
       end_column: 0,
       annotation_level,
-      message: `Junit Results ran ${numTests} in ${testDuration} seconds ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`,
+      message: `Tests ran ${numTests} in ${testDuration} seconds. ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`,
     };
-    // const annotation = {
-    //   path: 'test',
-    //   start_line: 1,
-    //   end_line: 1,
-    //   start_column: 2,
-    //   end_column: 2,
-    //   annotation_level,
-    //   message: `[500] failure`,
-    // };
 
 
     const update_req = {
