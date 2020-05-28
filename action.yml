@@ -16,7 +16,7 @@ inputs:
     require: true
     default: 10
   commitSha:
-    description: 'sha of the commit to append annotations to. Set it to `${{ github.event.pull_request.head.sha }}`'
+    description: 'sha of the commit to append annotations to. Set it to `github.event.pull_request.head.sha`'
     require: true
 runs:
   using: 'node12'
