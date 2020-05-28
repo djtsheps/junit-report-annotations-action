@@ -4,6 +4,8 @@ const glob = require('@actions/glob');
 const parser = require('xml2json');
 const fs = require('fs');
 
+console.log(JSON.stringify(process.env, null, 2));
+
 async function invokeOnOneOrMany(oneOrMany, fn) {
   if (Array.isArray(oneOrMany)) {
     for (const one of oneOrMany) {
