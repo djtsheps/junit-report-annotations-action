@@ -11,18 +11,13 @@ inputs:
     description: 'glob to junit xml files'
     required: true
     default: 'target/surefire-reports/*.xml'
-  includeSummary:
-    description: 'include summary annotation'
-    required: true
-    default: true
   numFailures:
     description: 'max number of failed tests to include'
     require: true
     default: 10
-  testSrcPath: 
-    description: 'path to test source'
-    required: true
-    default: 'src/test/java/'
+  commitSha:
+    description: 'sha of the commit to append annotations to. Set it to `${{ github.event.pull_request.head.sha }}`'
+    require: true
 runs:
   using: 'node12'
   main: 'index.js'

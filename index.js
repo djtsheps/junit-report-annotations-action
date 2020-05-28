@@ -19,11 +19,10 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
 (async () => {
   try {
     const path = core.getInput('path');
-    const includeSummary = core.getInput('includeSummary');
     const numFailures = core.getInput('numFailures');
     const accessToken = core.getInput('access-token');
-    const testSrcPath = core.getInput('testSrcPath');
     const globber = await glob.create(path, { followSymbolicLinks: false });
+    const commitSha = core.getInput('commitSha');
 
     let numTests = 0;
     let numSkipped = 0;
@@ -68,12 +67,12 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
     const octokit = new github.GitHub(accessToken);
     const req = {
       ...github.context.repo,
-      ref: github.context.sha
-    }
+      ref: commitSha
+    };
     const res = await octokit.checks.listForRef(req);
     console.log(JSON.stringify(res, null, 2));
 
-    const check_run_id = res.data.check_runs[0].id
+    const check_run_id = res.data.check_runs.filter(run => run.name === process.env.GITHUB_JOB)[0].id;
 
     const annotation_level = numFailed + numErrored > 0 ? 'failure' : 'notice';
     const annotation = {
