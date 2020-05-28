@@ -44,11 +44,24 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
         numFailed += Number(testsuite.failures);
         numSkipped += Number(testsuite.skipped);
         await invokeOnOneOrMany(testsuite.testcase, async testcase => {
-          if (testcase.failure) {
+          let failure = testcase.failure || testcase.error;
+          let failureReason = 'failed';
+          if (testcase.error) {
+            failureReason = 'errored';
+          }
+
+          if (failure) {
             if (annotations.length < numFailures) {
               let path = testcase.file || testsuite.filepath;
               path = path.replace(`${process.env.GITHUB_WORKSPACE}/`, '');
               let line = Number(testcase.lineno);
+
+              let message = '';
+              let fullMessage = failure;
+              if ('object' === typeof failure) {
+                message = failure.message;
+                fullMessage = failure.$t;
+              }
 
               annotations.push({
                 path: path,
@@ -57,7 +70,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: `${testcase.name} failed ${testcase.failure.message}`,
+                message: `${testcase.name} ${failureReason} ${message}\n\n${fullMessage}`,
               });
             }
           }
