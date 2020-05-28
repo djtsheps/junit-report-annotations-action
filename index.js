@@ -47,7 +47,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
           if (testcase.failure) {
             if (annotations.length < numFailures) {
               let path = testcase.file || testsuite.filepath;
-              path = path.replace(process.env.GITHUB_WORKSPACE, '');
+              path = path.replace(`${process.env.GITHUB_WORKSPACE}/`, '');
               let line = Number(testcase.lineno);
 
               annotations.push({
