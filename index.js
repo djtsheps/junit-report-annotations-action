@@ -46,7 +46,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
         await invokeOnOneOrMany(testsuite.testcase, async testcase => {
           if (testcase.failure) {
             if (annotations.length < numFailures) {
-              let path = testsuite.filepath || testsuite.file;
+              let path = testcase.file || testsuite.filepath;
               let line = Number(testcase.lineno);
 
               annotations.push({
