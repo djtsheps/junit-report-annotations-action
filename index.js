@@ -80,6 +80,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
       ref: github.context.sha
     }
     const res = await octokit.checks.listForRef(req);
+    console.log(JSON.stringify(res, null, 2));
 
     const check_run_id = res.data.check_runs[0].id
 
