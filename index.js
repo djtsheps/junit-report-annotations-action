@@ -89,6 +89,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
     const check_run_id = res.data.check_runs.filter(run => run.name === process.env.GITHUB_JOB)[0].id;
 
     const annotation_level = numFailed + numErrored > 0 ? 'failure' : 'notice';
+    let resultMessage = `Tests ran ${numTests} in ${testDuration} seconds. ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`;
     const annotation = {
       path: 'test',
       start_line: 0,
@@ -96,7 +97,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
       start_column: 0,
       end_column: 0,
       annotation_level,
-      message: `Tests ran ${numTests} in ${testDuration} seconds. ${numErrored} Errored, ${numFailed} Failed, ${numSkipped} Skipped`,
+      message: resultMessage,
     };
 
 
@@ -104,8 +105,8 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
       ...github.context.repo,
       check_run_id,
       output: {
-        title: "Junit Results",
-        summary: `Num passed etc`,
+        title: "Test Results",
+        summary: resultMessage,
         annotations: [annotation, ...annotations]
       }
     }
