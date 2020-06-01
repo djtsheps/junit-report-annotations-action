@@ -22,7 +22,7 @@ async function invokeOnOneOrMany(oneOrMany, fn) {
     const numFailures = core.getInput('numFailures');
     const accessToken = core.getInput('access-token');
     const globber = await glob.create(path, { followSymbolicLinks: false });
-    const commitSha = core.getInput('commitSha');
+    const commitSha = core.getInput('commitSha') || process.env.GITHUB_SHA;
 
     let numTests = 0;
     let numSkipped = 0;
