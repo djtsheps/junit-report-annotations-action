@@ -19,5 +19,5 @@ inputs:
     description: 'sha of the commit to append annotations to. Set it to `github.event.pull_request.head.sha`'
     require: true
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'index.js'
